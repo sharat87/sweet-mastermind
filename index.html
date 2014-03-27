@@ -2,6 +2,8 @@
 <html lang=en-US>
 <meta charset=utf-8>
 <title>Sweet Mastermind</title>
+
+<link rel=stylesheet href='http://fonts.googleapis.com/css?family=Lato:400,700,400italic'>
 <link rel=stylesheet href=styles.css>
 
 <div id=stage></div>
@@ -74,6 +76,51 @@
       <span>{{maxTrials}}</span>
     </label>
     <button class=new-btn on-click=new-game>↵ Start new game</button>
+  </div>
+</script>
+
+<script type=text/template id=help-tpl>
+  <header>
+    <button on-click=close class=close-btn>× ESC</button>
+    Sweet Mastermind
+  </header>
+  <div class=body>
+    <p>This is a heavily keyboard-focused mastermind game implementation I created
+      because all the others I found had a lot of distracting things.</p>
+    <p>The app is powered by <a href='http://ractivejs.org'>Ractive.js</a> library
+      and colors from the <a href='http://ethanschoonover.com/solarized'>Solarized</a>
+      project.</p>
+    <h3>Hotkeys</h3>
+    <table class=hotkey-table>
+      <tr>
+        <td>?</td>
+        <td>Show this help popup</td>
+      </tr>
+      <tr>
+        <td>0-9 a-f</td>
+        <td>Set value of active cell</td>
+      </tr>
+      <tr>
+        <td>&larr; &rarr;</td>
+        <td>Move active cell</td>
+      </tr>
+      <tr>
+        <td>Backspace</td>
+        <td>Empty the cell left of active cell</td>
+      </tr>
+      <tr>
+        <td>↵ Enter</td>
+        <td>Check code, if applicable</td>
+      </tr>
+      <tr>
+        <td>n</td>
+        <td>Start new game</td>
+      </tr>
+      <tr>
+        <td>× ESC</td>
+        <td>Close any open popup</td>
+      </tr>
+    </table>
   </div>
 </script>
 

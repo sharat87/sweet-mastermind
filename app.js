@@ -57,6 +57,19 @@ var NewGameModal = Modal.extend({
     }
 });
 
+var HelpModal = Modal.extend({
+    partials: {content: document.getElementById('help-tpl').textContent},
+    init: function () {
+        this._super();
+        HotkeyHandler.add(this);
+        this.on('hotkey', function (e) {
+            if (e.which == 27)
+                // ESC key
+                this.teardown();
+        });
+    }
+});
+
 var Game = Ractive.extend({
     el: '#stage',
     template: '#game-tpl',
@@ -137,6 +150,8 @@ var Game = Ractive.extend({
                 newGameModal.on('new-game', function () {
                     self.fire('new-game', this.data);
                 });
+            } else if (e.which == 191 && e.shiftKey) {
+                new HelpModal();
             } else {
                 var key = String.fromCharCode(e.which);
                 if (key.match(/^[0-9A-F]$/)) {

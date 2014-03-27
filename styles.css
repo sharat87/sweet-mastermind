@@ -16,6 +16,11 @@ body {
     text-rendering: optimizeLegibility;
 }
 
+a {
+    color: #268BD2;
+    text-decoration: none;
+}
+
 button {
     font: inherit;
     color: #586E75;
@@ -117,10 +122,11 @@ label {
 
 .modal {
     background: #FDF6E3;
-    margin: 40px auto;
+    margin: 5% auto;
     width: 40%;
     border-radius: 3px;
     box-shadow: 0 6px 24px rgba(0, 0, 0, .7);
+    max-height: 90%;
 }
 
 .modal header {
@@ -130,6 +136,7 @@ label {
     color: #EEE8D5;
     border-radius: 3px 3px 0 0;
     font-size: 1.2em;
+    font-weight: bold;
 }
 
 .modal .close-btn {
@@ -149,6 +156,11 @@ label {
 
 .modal .body {
     padding: 6px 12px 18px;
+    overflow: auto;
+}
+
+.modal p {
+    text-align: left;
 }
 
 #help-tip {
@@ -157,4 +169,14 @@ label {
     padding: 3px 12px;
     border-top: thin solid #93A1A1;
     opacity: .8;
+}
+
+.hotkey-table td {
+    padding: 3px 12px;
+    text-align: left;
+}
+
+.hotkey-table td:first-child {
+    font-family: monospace;
+    text-align: center;
 }

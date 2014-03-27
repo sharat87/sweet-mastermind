@@ -1,0 +1,152 @@
+* { box-sizing: border-box; }
+
+html, body {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    text-align: center;
+    padding: 6px;
+    background: #FDF6E3;
+    color: #657B83;
+    font-family: Lato;
+    font-size: 20px;
+    text-rendering: optimizeLegibility;
+}
+
+button {
+    font: inherit;
+    color: #586E75;
+    cursor: pointer;
+    text-rendering: inherit;
+}
+
+table {
+    margin: 0 auto;
+    border-collapse: collapse;
+}
+
+td {
+    vertical-align: middle;
+    margin: 3px;
+}
+
+label {
+    display: block;
+    margin-top: 12px;
+}
+
+#stage > * {
+    width: 100%;
+    height: 100%;
+}
+
+.status-msg {
+    margin: 0 0 12px;
+}
+
+.peg {
+    display: inline-block;
+    width: 56px;
+    font-size: 32px;
+    text-align: center;
+    border: thick solid #EEE8D5;
+    border-radius: 3px;
+    padding: 3px;
+}
+
+.peg.active {
+    border-color: #CB4B16;
+}
+
+.feedback {
+    text-align: left;
+    padding-left: 12px;
+}
+
+.check-btn {
+    background: #268BD2;
+    border: none;
+    border-radius: 3px;
+    color: #EEE8D5;
+    padding: 6px 12px;
+    display: inline-block;
+    margin-left: 12px;
+}
+
+.check-btn:disabled {
+    background: #93A1A1;
+    opacity: .4;
+}
+
+.game-over-msg {
+    padding: 6px 12px;
+    border-radius: 3px;
+    color: #FDF6E3;
+    max-width: 600px;
+    margin: 12px auto;
+}
+
+.won {
+    background: #859900;
+}
+
+.lost {
+    background: #DC322F;
+}
+
+.new-btn {
+    margin-top: 18px;
+    border: none;
+    border-radius: 3px;
+    background: #6C71C4;
+    color: #FDF6E3;
+    padding: 6px 12px;
+}
+
+.modal-bg {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, .3);
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.modal {
+    background: #FDF6E3;
+    margin: 40px auto;
+    width: 40%;
+    border-radius: 3px;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, .7);
+}
+
+.modal header {
+    background-color: #2AA198;
+    padding: 6px;
+    text-align: left;
+    color: #EEE8D5;
+    border-radius: 3px 3px 0 0;
+    font-size: 1.2em;
+}
+
+.modal .close-btn {
+    float: right;
+    border: 2px solid transparent;
+    border-radius: 3px;
+    padding: 3px 6px;
+    font-size: .6em;
+    background: transparent;
+    color: #EEE8D5;
+}
+
+.modal .close-btn:hover {
+    background-color: #DC322F;
+    border-color: #DC322F;
+}
+
+.modal .body {
+    padding: 6px 12px 18px;
+}

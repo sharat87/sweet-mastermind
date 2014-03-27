@@ -150,3 +150,11 @@ label {
 .modal .body {
     padding: 6px 12px 18px;
 }
+
+#help-tip {
+    margin-top: 32px;
+    display: inline-block;
+    padding: 3px 12px;
+    border-top: thin solid #93A1A1;
+    opacity: .8;
+}

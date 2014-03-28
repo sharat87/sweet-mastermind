@@ -8,8 +8,6 @@
 
 <p class=status-msg data-bind='visible: !gameOver()'>
   The code is made from `<span data-bind='text: pool'></span>` characters.
-  Trial <span data-bind='text: 1 + trials().length'></span> of
-  <span data-bind='text: maxTrials'></span>.
 </p>
 
 <p class=game-over-msg data-bind='visible: gameOver, css: {won: won, lost: !won()}'>
@@ -24,6 +22,10 @@
   <tbody>
     <!-- ko foreach: trials -->
     <tr>
+      <td class=slot-num>
+        <span data-bind='text: 1 + $index()'></span> /
+        <span data-bind='text: $root.maxTrials'></span>
+      </td>
       <!-- ko foreach: input -->
       <td class=peg data-bind='text: $data'></td>
       <!-- /ko -->
@@ -34,6 +36,10 @@
     </tr>
     <!-- /ko -->
     <tr data-bind='visible: !gameOver()'>
+      <td class=slot-num>
+        <span data-bind='text: 1 + $root.trials().length'></span> /
+        <span data-bind='text: $root.maxTrials'></span>
+      </td>
       <!-- ko foreach: $root.currentInput -->
       <td class=peg data-bind='text: $data, css: {active: $root.currentIndex() == $index()}'></td>
       <!-- /ko -->

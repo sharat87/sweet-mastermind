@@ -1,220 +1,183 @@
-var HotkeyHandler = (function () {
-    function handler(e) {
-        stack[stack.length - 1].fire('hotkey', e);
-    }
-
-    function add(ractive) {
-        stack.push(ractive);
-        ractive.on('teardown', function () {
-            stack.pop();
-        });
-    }
-
-    var stack = [];
-    document.body.addEventListener('keydown', handler);
-    return {add: add};
-}());
-
-var Modal = Ractive.extend({
-    el: document.body,
-    append: true,
-    template: '#modal-tpl',
-    init: function () {
-        HotkeyHandler.add(this);
-        this.on('close', function () {
-            this.teardown();
-        });
-        this.on('bg-click', function (event) {
-            if (event.original.target.classList.contains('modal-bg'))
-                this.fire('close');
-        });
-    }
-});
-
-var NewGameModal = Modal.extend({
-    partials: {content: document.getElementById('new-game-tpl').textContent},
-
-    data: {
+var model = {
+    secret: '',
+    maxTrials: 0,
+    pool: '',
+    trials: [],
+    currentInput: '',
+    currentIndex: 0,
+    checkable: false,
+    gameOver: false,
+    won: false,
+    newGameProps: {
         range: 9,
         size: 4,
         maxTrials: 8
     },
+    showHelp: false,
+    showNewGame: false
+};
 
-    init: function () {
-        this._super();
-        this.on('hotkey', function (e) {
-            if (e.which == 27) {
-                // ESC key
-                this.teardown();
-            } else if (e.which == 13) {
-                // Enter key
-                this.fire('new-game');
-            }
-        });
-        this.on('new-game', function () {
-            this.teardown();
-        });
-    }
-});
-
-var HelpModal = Modal.extend({
-    partials: {content: document.getElementById('help-tpl').textContent},
-    init: function () {
-        this._super();
-        HotkeyHandler.add(this);
-        this.on('hotkey', function (e) {
-            if (e.which == 27)
-                // ESC key
-                this.teardown();
-        });
-    }
-});
-
-var Game = Ractive.extend({
-    el: '#stage',
-    template: '#game-tpl',
-
-    data: {
-        dummyArray: function (size) {
-            return new Array(size);
-        }
-    },
-
-    init: function (options) {
-        // options has keys `range`, `maxTrials`, `size`.
-        var pool = '1234567890ABCDEF'.slice(0, options.range),
-            secret = options.secret || this.mkCode(pool, options.size, false);
-
-        this.set({
-            secret: secret,
-            maxTrials: options.maxTrials,
-            pool: pool,
-            trials: [],
-            currentInput: this.blankInput(secret),
-            currentIndex: 0,
-            checkable: false,
-            gameOver: false,
-            won: false
-        });
-
-        console.debug('Secret is', this.get('secret'));
-
-        HotkeyHandler.add(this);
-
-        this.on('check', function checkHandler() {
-            if (!this.get('checkable') || this.get('gameOver')) return;
-            var input = this.get('currentInput'),
-                feedback = this.codeFeedback(input);
-            this.get('trials').push({
-                input: input,
-                blacks: feedback.blacks,
-                whites: feedback.whites
-            });
-            if (feedback.blacks == input.length) {
-                this.set({gameOver: true, won: true});
-            } else if (this.get('trials').length >= this.get('maxTrials')) {
-                this.set({gameOver: true, won: false});
-            } else {
-                this.set({currentIndex: 0, currentInput: this.blankInput()});
-            }
-        });
-
-        this.observe('currentInput', function (value) {
-            this.set('checkable', value.indexOf('∙') < 0);
-        });
-
-        this.on('hotkey', function (e) {
-            if (e.ctrlKey || e.altKey) return;
-            if (e.which == 13) {
-                // Enter key
-                this.fire('check');
-            } else if (e.which == 37) {
-                // Left key
-                this.set('currentIndex', Math.max(0, this.get('currentIndex') - 1));
-            } else if (e.which == 39) {
-                // Right key
-                this.set('currentIndex', Math.min(this.get('secret').length, this.get('currentIndex') + 1));
-            } else if (e.which == 8) {
-                // Backspace key
-                if (this.get('currentIndex') > 0) {
-                    this.set('currentIndex', Math.max(0, this.get('currentIndex') - 1));
-                    this.set('currentInput.' + this.get('currentIndex'), '∙');
-                }
-            } else if (e.which == 78) {
-                // `n` key
-                var self = this, newGameModal = new NewGameModal({
-                    range: this.get('pool').length,
-                    size: this.get('secret').length,
-                    maxTrials: this.get('maxTrials')
-                });
-                newGameModal.on('new-game', function () {
-                    self.fire('new-game', this.data);
-                });
-            } else if (e.which == 191 && e.shiftKey) {
-                new HelpModal();
-            } else {
-                var key = String.fromCharCode(e.which);
-                if (key.match(/^[0-9A-F]$/)) {
-                    this.set('currentInput.' + this.get('currentIndex'), key);
-                    this.set('currentIndex', (this.get('currentIndex') + 1) % this.get('secret').length);
-                }
-            }
-            e.stopPropagation();
-            return false;
-        });
-
-
-    },
-
-    mkCode: function (pool, size, allowRepeats) {
-        var value = '';
-        while (value.length < size) {
-            var c = pool[Math.floor(Math.random() * pool.length)];
-            if (allowRepeats || value.indexOf(c) < 0)
-                value += c;
-        }
-        return value;
-    },
-
-    blankInput: function (secret) {
-        return (secret || this.get('secret')).replace(/./g, '∙').split('');
-    },
-
-    codeFeedback: function (code) {
-        var secret = this.get('secret');
-        code = code.slice(0);
-
-        if (code.join('') == secret)
-            return {blacks: 4, whites: 0};
-
-        var blacks = 0, whites = 0;
-
-        for (var i = 0, len = secret.length; i < len; ++i) {
-            if (code[i] == secret[i]) {
-                ++blacks;
-                code[i] = null;
-            }
-        }
-
-        for (i = 0, len = secret.length; i < len; ++i) {
-            if (!code[i]) continue;
-            var pos = code.indexOf(secret[i]);
-            if (pos >= 0) {
-                ++whites;
-                code[pos] = null;
-            }
-        }
-
-        return {blacks: blacks, whites: whites};
-    }
-});
-
-function mkNewGame(options) {
-    var app = new Game(options);
-    app.on('new-game', function (options) {
-        app.teardown();
-        mkNewGame(options);
-    });
+function startNewGame() {
+    closeNewGame();
+    var pool = '1234567890ABCDEF'.slice(0, model.newGameProps.range()),
+        secret = mkCode(pool, model.newGameProps.size(), false);
+    console.debug('secret is', secret);
+    model.secret(secret)
+        .maxTrials(model.newGameProps.maxTrials())
+        .pool(pool)
+        .trials([])
+        .currentInput(blankInput(secret))
+        .currentIndex(0)
+        .gameOver(false)
+        .won(false);
 }
 
-mkNewGame({range: 9, maxTrials: 8, size: 4});
+function mkCode(pool, size, allowRepeats) {
+    var value = '';
+    while (value.length < size) {
+        var c = pool[Math.floor(Math.random() * pool.length)];
+        if (allowRepeats || value.indexOf(c) < 0)
+            value += c;
+    }
+    return value;
+}
+
+function check() {
+    if (!model.checkable() || model.gameOver()) return;
+
+    var input = model.currentInput(),
+        feedback = codeFeedback(input);
+
+    feedback.input = input;
+    model.trials.push(feedback);
+
+    if (feedback.blacks == input.length) {
+        model.gameOver(true);
+        model.won(true);
+    } else if (model.trials().length >= model.maxTrials()) {
+        model.gameOver(true);
+        model.won(false);
+    } else {
+        model.currentIndex(0);
+        model.currentInput(blankInput());
+    }
+}
+
+function codeFeedback(code) {
+    var secret = model.secret();
+    code = code.slice(0);
+
+    if (code.join('') == secret)
+        return {blacks: 4, whites: 0};
+
+    var blacks = 0, whites = 0;
+
+    for (var i = 0, len = secret.length; i < len; ++i) {
+        if (code[i] == secret[i]) {
+            ++blacks;
+            code[i] = null;
+        }
+    }
+
+    for (i = 0, len = secret.length; i < len; ++i) {
+        if (!code[i]) continue;
+        var pos = code.indexOf(secret[i]);
+        if (pos >= 0) {
+            ++whites;
+            code[pos] = null;
+        }
+    }
+
+    return {blacks: blacks, whites: whites};
+}
+
+function blankInput(secret) {
+    return (secret || model.secret()).replace(/./g, '∙').split('');
+}
+
+function dummyArray(size) {
+    return new Array(size);
+}
+
+function onHotkey(data, event) {
+    if (model.showNewGame())
+        newGameHotkeyHandle(event);
+    else if (model.showHelp())
+        helpHotkeyHandle(event);
+    else
+        gameHotkeyHandle(event);
+    return true; // ko will prevent default without this!
+}
+
+function gameHotkeyHandle(event) {
+    if (event.ctrlKey || event.altKey) return;
+    if (event.which == 13) {
+        // Enter key
+        check();
+    } else if (event.which == 37) {
+        // Left key
+        model.currentIndex(Math.max(0, model.currentIndex() - 1));
+    } else if (event.which == 39) {
+        // Right key
+        model.currentIndex(Math.min(model.secret().length - 1, model.currentIndex() + 1));
+    } else if (event.which == 8) {
+        // Backspace key
+        if (model.currentIndex() > 0) {
+            model.currentIndex(model.currentIndex() - 1);
+            model.currentInput()[model.currentIndex()] = '∙';
+            model.currentInput.valueHasMutated();
+        }
+    } else if (event.which == 78) {
+        // `n` key
+        model.newGameProps.range(model.pool().length);
+        model.newGameProps.size(model.secret().length);
+        model.newGameProps.maxTrials(model.maxTrials());
+        model.showNewGame(true);
+    } else if (event.which == 191 && event.shiftKey) {
+        model.showHelp(true);
+    } else {
+        var key = String.fromCharCode(event.which - (event.which >= 96 ? 48 : 0));
+        if (key.match(/^[0-9A-F]$/)) {
+            model.currentInput()[model.currentIndex()] = key;
+            model.currentInput.valueHasMutated();
+            model.currentIndex((model.currentIndex() + 1) % model.secret().length);
+        }
+    }
+    event.stopPropagation();
+}
+
+function newGameHotkeyHandle(event) {
+    if (event.which == 27) {
+        closeNewGame();
+    } else if (event.which == 13) {
+        startNewGame();
+    }
+}
+
+function closeNewGame() {
+    model.showNewGame(false);
+}
+
+function helpHotkeyHandle(event) {
+    if (event.which == 27)
+        closeHelp();
+}
+
+function closeHelp() {
+    model.showHelp(false);
+}
+
+function mkObservables(obj) {
+    for (var key in obj)
+        if (obj[key] instanceof Array) obj[key] = ko.observableArray(obj[key]);
+        else if (obj[key] instanceof Object) mkObservables(obj[key]);
+        else obj[key] = ko.observable(obj[key]);
+}
+
+mkObservables(model);
+model.currentInput.subscribe(function (value) {
+    model.checkable(value.indexOf('∙') < 0);
+});
+
+startNewGame();
+ko.applyBindings(model);

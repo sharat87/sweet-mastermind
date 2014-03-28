@@ -4,81 +4,52 @@
 <title>Sweet Mastermind</title>
 <link rel=stylesheet href=styles.css>
 
-<div id=stage></div>
+<body data-bind='event: {keydown: onHotkey}'>
+
+<p class=status-msg data-bind='visible: !gameOver()'>
+  The code is made from `<span data-bind='text: pool'></span>` characters.
+  Trial <span data-bind='text: 1 + trials().length'></span> of
+  <span data-bind='text: maxTrials'></span>.
+</p>
+
+<p class=game-over-msg data-bind='visible: gameOver, css: {won: won, lost: !won()}'>
+  Game Over.
+  <span data-bind='visible: won'>You won in <span data-bind='text: trials().length'></span>
+    trials!</span>
+  <span data-bind='visible: !won()'>You lost. Secret is
+    <span data-bind='text: secret'></span>.</span>
+</p>
+
+<table>
+  <tbody>
+    <!-- ko foreach: trials -->
+    <tr>
+      <!-- ko foreach: input -->
+      <td class=peg data-bind='text: $data'></td>
+      <!-- /ko -->
+      <td class=feedback>
+        <!-- ko foreach: dummyArray(blacks) -->● <!-- /ko -->
+        <!-- ko foreach: dummyArray(whites) -->○ <!-- /ko -->
+      </td>
+    </tr>
+    <!-- /ko -->
+    <tr data-bind='visible: !gameOver()'>
+      <!-- ko foreach: $root.currentInput -->
+      <td class=peg data-bind='text: $data, css: {active: $root.currentIndex() == $index()}'></td>
+      <!-- /ko -->
+      <td>
+        <button class=check-btn data-bind='click: check, disable: !$root.checkable()'>
+          ↵ Check!</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
 <div id=help-tip>Press ? for help</div>
 
-<script type=text/template id=game-tpl>
-  <div id=game>
-    {{^gameOver}}
-    <p class=status-msg>
-      The code is made from `{{pool}}` characters.
-      Trial {{1 + trials.length}} of {{maxTrials}}.
-    </p>
-    {{/gameOver}}
-
-    {{#gameOver}}
-    <p class='game-over-msg {{won ? "won" : "lost"}}'>
-      Game Over.{{#won}} You won in {{trials.length}} trials!{{/won}}{{^won}} You lost. Secret is {{secret}}.{{/won}}
-    </p>
-    {{/gameOver}}
-
-    <table>
-      {{#trials}}
-      <tr>
-        {{#input}}<td class=peg>{{.}}</td>{{/input}}
-        <td class=feedback>
-          {{#dummyArray(blacks)}}● {{/blacks}}
-          {{#dummyArray(whites)}}○ {{/whites}}
-        </td>
-      </tr>
-      {{/trials}}
-      {{^gameOver}}
-      <tr>
-        {{#currentInput:i}}<td class='peg {{currentIndex == i ? "active" : ""}}'
-          >{{.}}</td>{{/currentInput}}
-        <td>
-          <button class=check-btn on-click=check disabled='{{!checkable}}'>↵ Check!</button>
-        </td>
-      </tr>
-      {{/gameOver}}
-    </table>
-  </div>
-</script>
-
-<script type=text/template id=modal-tpl>
-  <div class=modal-bg on-click=bg-click intro=fadeIn outro=fadeOut>
-    <div class=modal>{{>content}}</div>
-  </div>
-</script>
-
-<script type=text/template id=new-game-tpl>
+<div class=popup data-bind='visible: showHelp'>
   <header>
-    <button on-click=close class=close-btn>× ESC</button>
-    New game
-  </header>
-  <div on-hotkey=hotkey class=body>
-    <label>
-      <span>Range</span>
-      <input type=range value='{{range}}' min='{{size+1}}' max=16>
-      <span>{{range}}</span>
-    </label>
-    <label>
-      <span>Code size</span>
-      <input type=range value='{{size}}' min=3 max=6>
-      <span>{{size}}</span>
-    </label>
-    <label>
-      <span>Max trials</span>
-      <input type=range value='{{maxTrials}}' min=6 max=20>
-      <span>{{maxTrials}}</span>
-    </label>
-    <button class=new-btn on-click=new-game>↵ Start new game</button>
-  </div>
-</script>
-
-<script type=text/template id=help-tpl>
-  <header>
-    <button on-click=close class=close-btn>× ESC</button>
+    <button data-bind='click: closeHelp' class=close-btn>× ESC</button>
     Sweet Mastermind
   </header>
   <div class=body>
@@ -119,7 +90,32 @@
       </tr>
     </table>
   </div>
-</script>
+</div>
 
-<script src=Ractive.min.js></script>
+<div class=popup data-bind='visible: showNewGame, with: newGameProps'>
+  <header>
+    <button data-bind='click: closeNewGame' class=close-btn>× ESC</button>
+    New game
+  </header>
+  <div on-hotkey=hotkey class=body>
+    <label>
+      <span>Range</span>
+      <input type=range data-bind='value: range, attr: {min: 1 + size()}' max=16>
+      <span data-bind='text: range'></span>
+    </label>
+    <label>
+      <span>Code size</span>
+      <input type=range data-bind='value: size' min=3 max=6>
+      <span data-bind='text: size'></span>
+    </label>
+    <label>
+      <span>Max trials</span>
+      <input type=range data-bind='value: maxTrials' min=6 max=20>
+      <span data-bind='text: maxTrials'></span>
+    </label>
+    <button class=new-btn data-bind='click: startNewGame'>↵ Start new game</button>
+  </div>
+</div>
+
+<script src=knockout-3.1.0.js></script>
 <script src=app.js></script>

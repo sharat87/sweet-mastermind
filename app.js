@@ -133,6 +133,10 @@ function gameHotkeyHandle(event) {
         model.newGameProps.size(model.secret().length);
         model.newGameProps.maxTrials(model.maxTrials());
         model.showNewGame(true);
+    } else if (event.which == 88) {
+        // `x` key
+        if (confirm('Give up game?'))
+            model.gameOver(true).won(false);
     } else if (event.which == 191 && event.shiftKey) {
         model.showHelp(true);
     } else {

@@ -11,7 +11,7 @@ var model = {
     newGameProps: {
         range: 9,
         size: 4,
-        maxTrials: 8
+        maxTrials: 9
     },
     showHelp: false,
     showNewGame: false
@@ -80,7 +80,6 @@ function codeFeedback(code) {
     }
 
     for (i = 0, len = secret.length; i < len; ++i) {
-        if (!code[i]) continue;
         var pos = code.indexOf(secret[i]);
         if (pos >= 0) {
             ++whites;
@@ -116,10 +115,11 @@ function gameHotkeyHandle(event) {
         check();
     } else if (event.which == 37) {
         // Left key
-        model.currentIndex(Math.max(0, model.currentIndex() - 1));
+        var secretLen = model.secret().length;
+        model.currentIndex((secretLen + model.currentIndex() - 1) % secretLen);
     } else if (event.which == 39) {
         // Right key
-        model.currentIndex(Math.min(model.secret().length - 1, model.currentIndex() + 1));
+        model.currentIndex((model.currentIndex() + 1) % model.secret().length);
     } else if (event.which == 8) {
         // Backspace key
         if (model.currentIndex() > 0) {
@@ -133,8 +133,8 @@ function gameHotkeyHandle(event) {
         model.newGameProps.size(model.secret().length);
         model.newGameProps.maxTrials(model.maxTrials());
         model.showNewGame(true);
-    } else if (event.which == 88) {
-        // `x` key
+    } else if (event.which == 88 || event.which == 46) {
+        // `x` key, `Del` key
         model.currentInput()[model.currentIndex()] = '∙';
         model.currentInput.valueHasMutated();
     } else if (event.which == 85) {

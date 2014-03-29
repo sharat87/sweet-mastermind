@@ -52,14 +52,11 @@ function check() {
     model.trials.push(feedback);
 
     if (feedback.blacks == input.length) {
-        model.gameOver(true);
-        model.won(true);
+        model.gameOver(true).won(true);
     } else if (model.trials().length >= model.maxTrials()) {
-        model.gameOver(true);
-        model.won(false);
+        model.gameOver(true).won(false);
     } else {
-        model.currentIndex(0);
-        model.currentInput(blankInput());
+        model.currentIndex(0).currentInput(blankInput());
     }
 }
 
@@ -110,6 +107,7 @@ function onHotkey(data, event) {
 
 function gameHotkeyHandle(event) {
     if (event.ctrlKey || event.altKey) return;
+    console.log('event.which:', event.which);
     if (event.which == 13) {
         // Enter key
         check();
@@ -126,6 +124,12 @@ function gameHotkeyHandle(event) {
             model.currentIndex(model.currentIndex() - 1);
             model.currentInput()[model.currentIndex()] = '∙';
             model.currentInput.valueHasMutated();
+        }
+    } else if (event.which == 82) {
+        // `r` key
+        if (confirm('Restart? Are you sure?')) {
+            model.trials([]).currentInput(blankInput()).currentIndex(0)
+                .gameOver(false).won(false);
         }
     } else if (event.which == 78) {
         // `n` key

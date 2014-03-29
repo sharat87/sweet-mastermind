@@ -135,6 +135,10 @@ function gameHotkeyHandle(event) {
         model.showNewGame(true);
     } else if (event.which == 88) {
         // `x` key
+        model.currentInput()[model.currentIndex()] = '∙';
+        model.currentInput.valueHasMutated();
+    } else if (event.which == 85) {
+        // `u` key
         if (confirm('Give up game?'))
             model.gameOver(true).won(false);
     } else if (event.which == 191 && event.shiftKey) {

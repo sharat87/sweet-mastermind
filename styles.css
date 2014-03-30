@@ -110,15 +110,6 @@ label {
     margin: 12px auto;
 }
 
-.new-game-msg {
-    padding: 6px 12px;
-    border-radius: 3px;
-    color: #FDF6E3;
-    max-width: 600px;
-    margin: 12px auto;
-    background: #268BD2;
-}
-
 .won {
     background: #859900;
 }

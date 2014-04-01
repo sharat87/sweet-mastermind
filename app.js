@@ -117,6 +117,7 @@ function onHotkey(data, event) {
 
 function gameHotkeyHandle(event) {
     if (event.ctrlKey || event.altKey) return;
+    console.log('event.which:', event.which);
     if (event.which == 13) {
         // Enter key
         check();
@@ -127,6 +128,12 @@ function gameHotkeyHandle(event) {
     } else if (event.which == 39) {
         // Right key
         model.currentIndex((model.currentIndex() + 1) % model.secret().length);
+    } else if (event.which == 36) {
+        // Home key
+        model.currentIndex(0);
+    } else if (event.which == 35) {
+        // End key
+        model.currentIndex(model.secret().length - 1);
     } else if (event.which == 8) {
         // Backspace key
         if (model.currentIndex() > 0) {

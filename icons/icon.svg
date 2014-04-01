@@ -1,0 +1,17 @@
+<svg version="1.1" baseProfile="full" viewBox="0 0 100 100">
+    <circle cx="50" cy="50" r="50" fill="#EEE8D5"/>
+    <line x1="0" x2="100" y1="50" y2="50" stroke="#657B83"/>
+    <line x1="50" x2="50" y1="0" y2="100" stroke="#657B83"/>
+    <text font-size="32" font-family="Lato">
+        <tspan x="21" y="39" fill="#268BD2">1</tspan>
+        <tspan x="60" y="39" fill="#D33682">5</tspan>
+        <tspan x="20" y="83" fill="#B58900">C</tspan>
+        <tspan x="62" y="83" fill="#2AA198">?</tspan>
+    </text>
+    <style>
+    @font-face {
+        font-family: Lato;
+        src: url('fonts/Lato-Regular.ttf');
+    }
+    </style>
+</svg>

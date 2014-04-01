@@ -7,7 +7,7 @@
 <body data-bind='event: {keydown: onHotkey}'>
 
 <p class=status-msg data-bind='visible: !gameOver()'>
-  The code is made from `<span data-bind='text: pool'></span>` characters.
+  Code is made of <span data-bind='text: pool' class=pool></span>.
 </p>
 
 <p class=game-over-msg data-bind='visible: gameOver, css: {won: won, lost: !won()}'>

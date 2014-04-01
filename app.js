@@ -1,3 +1,5 @@
+/*jshint browser:true, devel:true */
+/*global ko */
 var model = {
     secret: '',
     maxTrials: 0,
@@ -16,6 +18,14 @@ var model = {
     showHelp: false,
     showNewGame: false
 };
+
+mkObservables(model);
+model.currentInput.subscribe(function (value) {
+    model.checkable(value.indexOf('∙') < 0);
+});
+
+startNewGame();
+ko.applyBindings(model);
 
 function startNewGame() {
     closeNewGame();
@@ -107,7 +117,6 @@ function onHotkey(data, event) {
 
 function gameHotkeyHandle(event) {
     if (event.ctrlKey || event.altKey) return;
-    console.log('event.which:', event.which);
     if (event.which == 13) {
         // Enter key
         check();
@@ -185,11 +194,3 @@ function mkObservables(obj) {
         else if (obj[key] instanceof Object) mkObservables(obj[key]);
         else obj[key] = ko.observable(obj[key]);
 }
-
-mkObservables(model);
-model.currentInput.subscribe(function (value) {
-    model.checkable(value.indexOf('∙') < 0);
-});
-
-startNewGame();
-ko.applyBindings(model);

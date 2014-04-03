@@ -7,6 +7,11 @@
 
 <body data-bind='event: {keydown: onHotkey}'>
 
+<header>
+  Sweet Mastermind
+  <button class=close-btn data-bind='click: quit'>× ESC</button>
+</header>
+
 <p class=status-msg data-bind='visible: !gameOver()'>
   Code is made of <span data-bind='text: pool' class=pool></span>.
 </p>

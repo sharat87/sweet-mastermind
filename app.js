@@ -115,7 +115,7 @@ function gameHotkeyHandle(event) {
     if (event.ctrlKey || event.altKey) return;
     if (event.which == 27) {
         // ESC key
-        window.close();
+        quit();
     } else if (event.which == 13) {
         // Enter key
         check();
@@ -170,6 +170,10 @@ function gameHotkeyHandle(event) {
         }
     }
     event.stopPropagation();
+}
+
+function quit() {
+    window.close();
 }
 
 function newGameHotkeyHandle(event) {

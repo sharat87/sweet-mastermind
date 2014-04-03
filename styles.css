@@ -25,17 +25,18 @@ html, body {
 
 body {
     text-align: center;
-    padding: 6px;
     background: #FDF6E3;
     color: #657B83;
     font-family: Lato;
     font-size: 20px;
     text-rendering: optimizeLegibility;
+    -webkit-app-region: drag;
 }
 
 a {
     color: #268BD2;
     text-decoration: none;
+    -webkit-app-region: no-drag;
 }
 
 button {
@@ -43,6 +44,7 @@ button {
     color: #586E75;
     cursor: pointer;
     text-rendering: inherit;
+    -webkit-app-region: no-drag;
 }
 
 table {
@@ -58,6 +60,14 @@ td {
 label {
     display: block;
     margin-top: 12px;
+}
+
+body > header {
+    background: #B58900;
+    color: #FDF6E3;
+    padding: 3px 12px;
+    margin-bottom: 12px;
+    font-size: 1.3em;
 }
 
 .status-msg {
@@ -159,7 +169,7 @@ label {
     font-weight: bold;
 }
 
-.popup .close-btn {
+.close-btn {
     float: right;
     border: 2px solid transparent;
     border-radius: 3px;
@@ -169,7 +179,7 @@ label {
     color: #EEE8D5;
 }
 
-.popup .close-btn:hover {
+.close-btn:hover {
     background-color: #DC322F;
     border-color: #DC322F;
 }

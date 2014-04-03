@@ -118,7 +118,7 @@
   </div>
 </div>
 
-<div class=popup data-bind='visible: showNewGame, with: newGameProps'>
+<div id=new-game-popup class=popup data-bind='visible: showNewGame, with: newGameProps'>
   <header>
     <button data-bind='click: closeNewGame' class=close-btn>× ESC</button>
     New game
@@ -126,8 +126,8 @@
   <div on-hotkey=hotkey class=body>
     <label>
       <span>Range</span>
-      <input type=range data-bind='value: range, attr: {min: 1 + size()}' max=16>
-      <span data-bind='text: range'></span>
+      <input type=range data-bind='value: range, attr: {min: +size() + 1}' max=16>
+      <span data-bind='text: "1234567890ABCDEF".slice(0, range())'></span>
     </label>
     <label>
       <span>Code size</span>

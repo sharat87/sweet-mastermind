@@ -225,6 +225,11 @@ body > header {
     text-align: center;
 }
 
+#new-game-popup label span {
+    display: inline-block;
+    text-align: left;
+    width: 120px;
+}
 
 @media (max-width: 600px) {
     .popup {

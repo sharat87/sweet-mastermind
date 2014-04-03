@@ -75,7 +75,7 @@ function codeFeedback(code) {
     code = code.slice(0);
 
     if (code.join('') == secret)
-        return {blacks: 4, whites: 0};
+        return {blacks: secret.length, whites: 0};
 
     var blacks = 0, whites = 0;
 

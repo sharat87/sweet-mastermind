@@ -101,10 +101,6 @@ function blankInput(secret) {
     return (secret || model.secret()).replace(/./g, '∙').split('');
 }
 
-function dummyArray(size) {
-    return new Array(size);
-}
-
 function onHotkey(data, event) {
     if (model.showNewGame())
         newGameHotkeyHandle(event);
@@ -117,8 +113,10 @@ function onHotkey(data, event) {
 
 function gameHotkeyHandle(event) {
     if (event.ctrlKey || event.altKey) return;
-    console.log('event.which:', event.which);
-    if (event.which == 13) {
+    if (event.which == 27) {
+        // ESC key
+        window.close();
+    } else if (event.which == 13) {
         // Enter key
         check();
     } else if (event.which == 37) {

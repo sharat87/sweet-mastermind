@@ -15,6 +15,18 @@
     font-weight: bold;
 }
 
+::-webkit-scrollbar {
+    background: #EEE8D5;
+    border: none;
+    width: 4px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #586E75;
+    border: none;
+}
+
 * { box-sizing: border-box; }
 
 html, body {
@@ -149,14 +161,14 @@ body > header {
     width: 40%;
     border-radius: 3px;
     box-shadow: 0 6px 24px rgba(0, 0, 0, .7);
-    max-height: 90%;
+    max-height: 580px;
     position: absolute;
     top: 5%;
     height: 90%;
     left: 50%;
-    transform: translate(-50%);
-    -webkit-transform: translate(-50%);
-    -moz-transform: translate(-50%);
+    transform: translateX(-50%);
+    -webkit-transform: translateX(-50%);
+    -moz-transform: translateX(-50%);
 }
 
 .popup header {
@@ -167,6 +179,17 @@ body > header {
     border-radius: 3px 3px 0 0;
     font-size: 1.2em;
     font-weight: bold;
+}
+
+.popup .body {
+    padding: 6px 12px 18px;
+    overflow: auto;
+    height: calc(100% - 41px);
+}
+
+.popup p {
+    text-align: left;
+    margin: 3px 0 12px;
 }
 
 .close-btn {
@@ -182,17 +205,6 @@ body > header {
 .close-btn:hover {
     background-color: #DC322F;
     border-color: #DC322F;
-}
-
-.popup .body {
-    padding: 6px 12px 18px;
-    overflow: auto;
-    height: calc(100% - 41px);
-}
-
-.popup p {
-    text-align: left;
-    margin: 3px 0 12px;
 }
 
 #help-tip {
@@ -218,6 +230,9 @@ body > header {
     .popup {
         width: 100%;
         border-radius: 0;
+        top: 20px;
+        height: calc(100% - 20px);
+        max-height: 100%;
     }
 
     .popup header {

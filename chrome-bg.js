@@ -9,6 +9,5 @@ chrome.app.runtime.onLaunched.addListener(function () {
         height: h,
         left: left,
         top: top,
-        frame: 'none',
     });
 });

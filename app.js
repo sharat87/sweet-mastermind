@@ -1,5 +1,5 @@
 /*jshint browser:true, devel:true */
-/*global ko */
+/*global ko, chrome */
 var model = {
     secret: '',
     maxTrials: 0,
@@ -16,7 +16,8 @@ var model = {
         maxTrials: 9
     },
     showHelp: false,
-    showNewGame: false
+    showNewGame: false,
+    showChromeAppInstall: false
 };
 
 mkObservables(model);
@@ -25,6 +26,7 @@ model.currentInput.subscribe(function (value) {
 });
 
 startNewGame();
+initChromeInstallBtn();
 ko.applyBindings(model);
 
 function startNewGame() {
@@ -195,6 +197,14 @@ function helpHotkeyHandle(event) {
 
 function closeHelp() {
     model.showHelp(false);
+}
+
+function initChromeInstallBtn() {
+    model.showChromeAppInstall(window.chrome && !chrome.app.isInstalled);
+}
+
+function install() {
+    chrome.webstore.install();
 }
 
 function mkObservables(obj) {

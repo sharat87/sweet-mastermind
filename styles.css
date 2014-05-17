@@ -223,6 +223,20 @@ label {
     width: 120px;
 }
 
+.chrome-install-btn {
+    background-color: #268BD2;
+    background-image: linear-gradient(to top, transparent, rgba(255, 255, 255, .2));
+    color: #EEE8D5;
+    border: thin solid #657B83;
+    border-radius: 2px;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, .3);
+    padding: 3px 12px;
+}
+
+.chrome-install-btn:hover {
+    background-image: linear-gradient(to top, rgba(255, 255, 255, .1), rgba(255, 255, 255, .3));
+}
+
 @media (max-width: 600px) {
     .popup {
         width: 100%;

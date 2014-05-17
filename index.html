@@ -4,6 +4,9 @@
 <title>Sweet Mastermind</title>
 <link rel=stylesheet href=styles.css>
 <link rel=icon type=img/ico href=icons/icon-16.png>
+<link rel=canonical href='http://mastermind.sharats.me'>
+<link rel=chrome-webstore-item
+  href='https://chrome.google.com/webstore/detail/onjphhhmffmagmnnjjanpjmcodlncjdk'>
 
 <body data-bind='event: {keydown: onHotkey}'>
 
@@ -67,6 +70,8 @@
     <p>The app is powered by <a href='http://knockoutjs.com'>Knockout.js</a> library
       and colors from the <a href='http://ethanschoonover.com/solarized'>Solarized</a>
       project.</p>
+    <button class=chrome-install-btn
+      data-bind='click: install, visible: showChromeAppInstall'>Install Chrome App</button>
     <h3>Hotkeys</h3>
     <table class=hotkey-table>
       <tr>
